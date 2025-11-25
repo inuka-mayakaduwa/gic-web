@@ -1,0 +1,130 @@
+{
+    "Citizen": {
+        "Common": {
+            "Navbar": {
+                "organizations": "Organizations",
+                "services": "E-Services",
+                "forms": "Gov Forms",
+                "news": "News",
+                "help": "Help"
+            },
+            "Sidebar": {
+                "weather": "Weather Forecast",
+                "exploreMore": "Explore More",
+                "trains": "Train Schedules",
+                "outages": "Utility Outages"
+            },
+            "Footer": {
+                "copyright": "© 2025 Government Information Center. All rights reserved."
+            },
+            "Header": {
+                "GovWebDeclare": "An official website of The Government of Sri Lanka"
+            }
+        },
+        "Landing": {
+            "Hero": {
+                "title": "Government Information Center",
+                "subtitle": "Your gateway to Sri Lankan Government Services",
+                "searchPlaceholder": "Search for services, organizations, or information...",
+                "searchButton": "Search",
+                "tabs": {
+                    "all": "All",
+                    "organizations": "Organizations",
+                    "people": "People",
+                    "acts": "Acts",
+                    "gazettes": "Gazettes",
+                    "services": "Services",
+                    "news": "News"
+                }
+            },
+            "Sectors": {
+                "title": "Explore by Sector",
+                "education": {
+                    "name": "Education",
+                    "subPoints": [
+                        "Schools",
+                        "Universities",
+                        "Scholarships",
+                        "Curriculum"
+                    ]
+                },
+                "health": {
+                    "name": "Health",
+                    "subPoints": [
+                        "Hospitals",
+                        "Clinics",
+                        "Medical Services",
+                        "Public Health"
+                    ]
+                },
+                "finance": {
+                    "name": "Finance",
+                    "subPoints": [
+                        "Banking",
+                        "Taxation",
+                        "Budget",
+                        "Treasury"
+                    ]
+                },
+                "agriculture": {
+                    "name": "Agriculture",
+                    "subPoints": [
+                        "Farming",
+                        "Irrigation",
+                        "Livestock",
+                        "Fisheries"
+                    ]
+                },
+                "transport": {
+                    "name": "Transport",
+                    "subPoints": [
+                        "Railways",
+                        "Highways",
+                        "Aviation",
+                        "Ports"
+                    ]
+                },
+                "justice": {
+                    "name": "Justice",
+                    "subPoints": [
+                        "Courts",
+                        "Legal Aid",
+                        "Prisons",
+                        "Law Reform"
+                    ]
+                },
+                "administration": {
+                    "name": "Administration",
+                    "subPoints": [
+                        "Public Service",
+                        "Local Govt",
+                        "Elections",
+                        "Census"
+                    ]
+                },
+                "media": {
+                    "name": "Media",
+                    "subPoints": [
+                        "Broadcasting",
+                        "Press",
+                        "Digital Media",
+                        "Communications"
+                    ]
+                },
+                "environment": {
+                    "name": "Environment",
+                    "subPoints": [
+                        "Conservation",
+                        "Wildlife",
+                        "Forestry",
+                        "Climate"
+                    ]
+                }
+            },
+            "Organizations": {
+                "title": "Find Government Organizations",
+                "searchPlaceholder": "Search organizations..."
+            }
+        }
+    }
+}
