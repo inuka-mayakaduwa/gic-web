@@ -14,16 +14,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             },
             authorize: async (credentials) => {
                 console.log('[Auth] Starting authorization...')
-                console.log('[Auth] Credentials provided:', { 
+                console.log('[Auth] Credentials provided:', {
                     email: credentials?.email ? '***' : 'missing',
                     otp: credentials?.otp ? '***' : 'missing'
                 })
-                
+
                 try {
                     console.log('[Auth] Getting Prisma client...')
                     const prisma = getPrisma()
                     console.log('[Auth] Prisma client obtained')
-                    
+
                     if (!credentials?.email || !credentials?.otp) {
                         console.log('[Auth] Missing credentials')
                         return null
@@ -97,7 +97,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                             select: {
                                 id: true,
                                 email: true,
-                                username: true,
+                                name: true,
                                 profilePic: true,
                                 isActive: true,
                             },
@@ -128,7 +128,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                         return {
                             id: user.id,
                             email: user.email,
-                            name: user.username,
+                            name: user.name,
                             image: user.profilePic,
                         }
                     })

@@ -1,0 +1,16 @@
+import { SystemSidebar } from "@/components/console/system/Sidebar"
+
+export default function SystemLayout({
+    children,
+}: {
+    children: React.ReactNode
+}) {
+    return (
+        <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
+            <SystemSidebar />
+            <main className="flex-1 p-8 overflow-y-auto">
+                {children}
+            </main>
+        </div>
+    )
+}

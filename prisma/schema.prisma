@@ -14,8 +14,9 @@ datasource db {
 
 model SystemUser {
   id         String   @id @default(uuid())
-  username   String   @unique
+  name       String
   email      String   @unique
+  mobile     String?
   // password   String // Removed for OTP auth
   isActive   Boolean  @default(true)
   profilePic String?
@@ -27,15 +28,28 @@ model SystemUser {
 
   // System Level Permissions
   systemPermissionGroups  SystemPermissionGroup[]
-  directSystemPermissions SystemPermission[]
 
   // Organization Level Access
   orgUserGroups        UserOrgGroupMap[]
   orgCustomGroups      UserOrgCustomGroupMap[]
-  directOrgPermissions UserOrgPermissionMap[]
 }
 
-// --- ORGANIZATION MANAGEMENT ---
+// ============================================
+// ORGANIZATIONAL STRUCTURE
+// ============================================
+
+model Category {
+  id          String  @id @default(uuid())
+  nameEn      String
+  nameSi      String?
+  nameTa      String?
+  description String?
+
+  organizationCategories OrganizationCategory[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 
 model Organization {
   id          String   @id @default(uuid())
@@ -44,6 +58,9 @@ model Organization {
   nameEn      String
   nameSi      String?
   nameTa      String?
+  
+  email       String?
+  phone       String?
   
   website     String?
   
@@ -55,14 +72,11 @@ model Organization {
   descriptionSi String?
   descriptionTa String?
   
-  email       String?
-  hotline     String?
-  status      String   @default("ACTIVE") // ACTIVE, INACTIVE, SUSPENDED
   logo        String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  categories OrganizationCategory[]
+  organizationCategories OrganizationCategory[]
 
   // Sub-entities
   people       Person[]
@@ -77,16 +91,17 @@ model Organization {
 
   // Assignments
   userGroupAssignments   UserOrgGroupMap[]
-  directPermissionAssignments UserOrgPermissionMap[]
 }
 
 model OrganizationCategory {
-  id            String         @id @default(uuid())
-  slug          String         @unique
-  nameEn        String         @unique
-  nameSi        String?
-  nameTa        String?
-  organizations Organization[]
+  id             String       @id @default(uuid())
+  organizationId String
+  categoryId     String
+  
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  category       Category     @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, categoryId])
 }
 
 // --- SUB-ENTITIES ---
@@ -112,6 +127,7 @@ model Person {
   bioTa       String?
   
   image       String?
+  order       Int     @default(0)
 
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
@@ -189,6 +205,7 @@ model Service {
   
   serviceUrl     String?
   status         String  @default("ACTIVE") // ACTIVE, HIDDEN
+  order          Int     @default(0)
 
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
@@ -220,9 +237,12 @@ model News {
   contentSi     String?
   contentTa     String?
   
-  images        String[]
+  banner        String?
   publishedDate DateTime?
   status        String    @default("DRAFT") // DRAFT, PUBLISHED, ARCHIVED
+  major         Boolean   @default(false)
+  featuredPriority Int?   @default(0)
+  views         Int       @default(0)
 
   organizations Organization[]
 
@@ -260,7 +280,6 @@ model SystemPermission {
   description String?
 
   groups SystemPermissionGroup[]
-  users  SystemUser[]
 }
 
 model SystemPermissionGroup {
@@ -298,8 +317,6 @@ model OrgPermission {
 
   userGroups   OrgUserGroup[]
   customGroups OrgCustomGroup[]
-
-  directAssignments UserOrgPermissionMap[]
 }
 
 // Mapping Tables for Assignments
@@ -329,19 +346,6 @@ model UserOrgCustomGroupMap {
   @@unique([userId, orgCustomGroupId])
 }
 
-model UserOrgPermissionMap {
-  id     String     @id @default(uuid())
-  userId String
-  user   SystemUser @relation(fields: [userId], references: [id])
-
-  permissionId String
-  permission   OrgPermission @relation(fields: [permissionId], references: [id])
-
-  organizationId String
-  organization   Organization @relation(fields: [organizationId], references: [id])
-
-  @@unique([userId, permissionId, organizationId])
-}
 
 // --- OTP VERIFICATION ---
 

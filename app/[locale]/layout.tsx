@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/Header";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,6 +46,7 @@ export default async function RootLayout({
           <NextIntlClientProvider messages={messages}>
             <Header />
             {children}
+            <Toaster />
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>
