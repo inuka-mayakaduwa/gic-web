@@ -271,8 +271,6 @@ async function main() {
             superadminName = superadminName.trim()
         }
 
-        rl.close()
-
         console.log('\n✅ Superadmin details received')
         console.log(`   Email: ${superadminEmail}`)
         console.log(`   Name: ${superadminName}\n`)
@@ -430,19 +428,21 @@ async function main() {
             throw new Error('Superadmin group not found!')
         }
 
-        // Check if user is already in the group
-        const existingAssignment = await prisma.systemUser.findFirst({
-            where: {
-                id: superadminUserId,
+        // Check if user is already in the group using a more efficient query
+        const userWithGroup = await prisma.systemUser.findUnique({
+            where: { id: superadminUserId },
+            select: {
+                id: true,
                 systemPermissionGroups: {
-                    some: {
-                        id: superadminGroupId,
-                    },
+                    where: { id: superadminGroupId },
+                    select: { id: true },
                 },
             },
         })
 
-        if (!existingAssignment) {
+        const hasGroup = (userWithGroup?.systemPermissionGroups?.length ?? 0) > 0
+
+        if (!hasGroup) {
             await prisma.systemUser.update({
                 where: { id: superadminUserId },
                 data: {
@@ -477,7 +477,11 @@ async function main() {
         console.error('\n❌ Error during seeding:', error)
         throw error
     } finally {
-        rl.close()
+        try {
+            rl.close()
+        } catch {
+            // Readline interface may already be closed, ignore error
+        }
     }
 }
 
