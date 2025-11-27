@@ -1,0 +1,359 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+
+}
+
+// --- USER MANAGEMENT ---
+
+model SystemUser {
+  id         String   @id @default(uuid())
+  username   String   @unique
+  email      String   @unique
+  // password   String // Removed for OTP auth
+  isActive   Boolean  @default(true)
+  profilePic String?
+  
+  lastLogin  DateTime?
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+
+  // System Level Permissions
+  systemPermissionGroups  SystemPermissionGroup[]
+  directSystemPermissions SystemPermission[]
+
+  // Organization Level Access
+  orgUserGroups        UserOrgGroupMap[]
+  orgCustomGroups      UserOrgCustomGroupMap[]
+  directOrgPermissions UserOrgPermissionMap[]
+}
+
+// --- ORGANIZATION MANAGEMENT ---
+
+model Organization {
+  id          String   @id @default(uuid())
+  slug        String   @unique
+  
+  nameEn      String
+  nameSi      String?
+  nameTa      String?
+  
+  website     String?
+  
+  addressEn   String?
+  addressSi   String?
+  addressTa   String?
+  
+  descriptionEn String?
+  descriptionSi String?
+  descriptionTa String?
+  
+  email       String?
+  hotline     String?
+  status      String   @default("ACTIVE") // ACTIVE, INACTIVE, SUSPENDED
+  logo        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  categories OrganizationCategory[]
+
+  // Sub-entities
+  people       Person[]
+  departments  Department[]
+  services     Service[]
+  news         News[]
+  branches     OfficeBranch[]
+  contactInfos ContactInfo[]
+
+  // Custom Permission Groups
+  customGroups OrgCustomGroup[]
+
+  // Assignments
+  userGroupAssignments   UserOrgGroupMap[]
+  directPermissionAssignments UserOrgPermissionMap[]
+}
+
+model OrganizationCategory {
+  id            String         @id @default(uuid())
+  slug          String         @unique
+  nameEn        String         @unique
+  nameSi        String?
+  nameTa        String?
+  organizations Organization[]
+}
+
+// --- SUB-ENTITIES ---
+
+model Person {
+  id          String  @id @default(uuid())
+  slug        String  @unique
+  
+  titleEn     String?
+  titleSi     String?
+  titleTa     String?
+  
+  fullNameEn  String
+  fullNameSi  String?
+  fullNameTa  String?
+  
+  designationEn String?
+  designationSi String?
+  designationTa String?
+  
+  bioEn       String?
+  bioSi       String?
+  bioTa       String?
+  
+  image       String?
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  departments  Department[]
+  contactInfos ContactInfo[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ContactInfo {
+  id          String  @id @default(uuid())
+  type        String // Email, Mobile, Landline, Fax, Hotline
+  value       String
+  
+  descriptionEn String?
+  descriptionSi String?
+  descriptionTa String?
+
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+
+  personId String?
+  person   Person? @relation(fields: [personId], references: [id])
+
+  departmentId String?
+  department   Department? @relation(fields: [departmentId], references: [id])
+}
+
+model Department {
+  id          String  @id @default(uuid())
+  slug        String  @unique
+  
+  nameEn      String
+  nameSi      String?
+  nameTa      String?
+  
+  descriptionEn String?
+  descriptionSi String?
+  descriptionTa String?
+  
+  order       Int     @default(0)
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  people       Person[]
+  contactInfos ContactInfo[]
+}
+
+model Service {
+  id             String  @id @default(uuid())
+  slug           String  @unique
+  
+  nameEn         String
+  nameSi         String?
+  nameTa         String?
+  
+  descriptionEn  String?
+  descriptionSi  String?
+  descriptionTa  String?
+  
+  requiredDocsEn String?
+  requiredDocsSi String?
+  requiredDocsTa String?
+  
+  paymentDetailsEn String?
+  paymentDetailsSi String?
+  paymentDetailsTa String?
+  
+  processingTimeEn String?
+  processingTimeSi String?
+  processingTimeTa String?
+  
+  serviceUrl     String?
+  status         String  @default("ACTIVE") // ACTIVE, HIDDEN
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  ctas ServiceCTA[]
+}
+
+model ServiceCTA {
+  id        String  @id @default(uuid())
+  label     String
+  url       String
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id])
+}
+
+model News {
+  id            String    @id @default(uuid())
+  slug          String    @unique
+  
+  titleEn       String
+  titleSi       String?
+  titleTa       String?
+  
+  summaryEn     String?
+  summarySi     String?
+  summaryTa     String?
+  
+  contentEn     String
+  contentSi     String?
+  contentTa     String?
+  
+  images        String[]
+  publishedDate DateTime?
+  status        String    @default("DRAFT") // DRAFT, PUBLISHED, ARCHIVED
+
+  organizations Organization[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OfficeBranch {
+  id            String  @id @default(uuid())
+  slug          String  @unique
+  
+  nameEn        String
+  nameSi        String?
+  nameTa        String?
+  
+  addressEn     String?
+  addressSi     String?
+  addressTa     String?
+  
+  latitude      Float?
+  longitude     Float?
+  officeHours   String?
+  contactNumber String?
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+}
+
+// --- PERMISSION ARCHITECTURE ---
+
+// Layer 1: System Level
+model SystemPermission {
+  id          String  @id @default(uuid())
+  code        String  @unique // e.g. system.manageOrganizations
+  description String?
+
+  groups SystemPermissionGroup[]
+  users  SystemUser[]
+}
+
+model SystemPermissionGroup {
+  id          String             @id @default(uuid())
+  name        String             @unique
+  permissions SystemPermission[]
+  users       SystemUser[]
+}
+
+// Layer 2: Org User Groups (Templates)
+model OrgUserGroup {
+  id          String          @id @default(uuid())
+  name        String          @unique // e.g. Content Editor
+  permissions OrgPermission[]
+
+  assignments UserOrgGroupMap[]
+}
+
+// Layer 3: Org Custom Groups
+model OrgCustomGroup {
+  id             String       @id @default(uuid())
+  name           String
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  permissions OrgPermission[]
+
+  assignments UserOrgCustomGroupMap[]
+}
+
+model OrgPermission {
+  id          String  @id @default(uuid())
+  code        String  @unique // e.g. person.create
+  description String?
+
+  userGroups   OrgUserGroup[]
+  customGroups OrgCustomGroup[]
+
+  directAssignments UserOrgPermissionMap[]
+}
+
+// Mapping Tables for Assignments
+
+model UserOrgGroupMap {
+  id     String     @id @default(uuid())
+  userId String
+  user   SystemUser @relation(fields: [userId], references: [id])
+
+  orgGroupId String
+  orgGroup   OrgUserGroup @relation(fields: [orgGroupId], references: [id])
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  @@unique([userId, orgGroupId, organizationId])
+}
+
+model UserOrgCustomGroupMap {
+  id     String     @id @default(uuid())
+  userId String
+  user   SystemUser @relation(fields: [userId], references: [id])
+
+  orgCustomGroupId String
+  orgCustomGroup   OrgCustomGroup @relation(fields: [orgCustomGroupId], references: [id])
+
+  @@unique([userId, orgCustomGroupId])
+}
+
+model UserOrgPermissionMap {
+  id     String     @id @default(uuid())
+  userId String
+  user   SystemUser @relation(fields: [userId], references: [id])
+
+  permissionId String
+  permission   OrgPermission @relation(fields: [permissionId], references: [id])
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  @@unique([userId, permissionId, organizationId])
+}
+
+// --- OTP VERIFICATION ---
+
+model OtpVerification {
+  id        String   @id @default(uuid())
+  email     String
+  otpHash   String
+  expiresAt DateTime
+  verified  Boolean  @default(false)
+  attempts  Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([email])
+  @@index([expiresAt])
+}
