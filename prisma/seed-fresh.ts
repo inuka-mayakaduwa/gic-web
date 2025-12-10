@@ -121,29 +121,29 @@ const ORG_PERMISSIONS = [
     // Organization Info
     { code: 'org.info.view', description: 'View organization information' },
     { code: 'org.info.edit', description: 'Edit organization information' },
-    
+
     // People
     { code: 'org.person.view', description: 'View organizational people' },
     { code: 'org.person.create', description: 'Create organizational people' },
     { code: 'org.person.edit', description: 'Edit organizational people' },
     { code: 'org.person.delete', description: 'Delete organizational people' },
-    
+
     // Departments
     { code: 'org.department.view', description: 'View departments' },
     { code: 'org.department.create', description: 'Create departments' },
     { code: 'org.department.edit', description: 'Edit departments' },
     { code: 'org.department.delete', description: 'Delete departments' },
-    
+
     // Services
     { code: 'org.service.view', description: 'View services' },
     { code: 'org.service.create', description: 'Create services' },
     { code: 'org.service.edit', description: 'Edit services' },
     { code: 'org.service.delete', description: 'Delete services' },
-    
+
     // News
     { code: 'org.news.view', description: 'View news articles' },
     { code: 'org.news.manage', description: 'Manage news articles (create, edit, delete)' },
-    
+
     // Users
     { code: 'org.users.view', description: 'View organization users' },
     { code: 'org.users.manage', description: 'Manage organization users and permissions' },
@@ -242,7 +242,7 @@ async function main() {
     try {
         // 1. Prompt for superadmin details
         console.log('📝 Please provide superadmin details:\n')
-        
+
         let superadminEmail = ''
         let superadminName = ''
 
@@ -271,14 +271,19 @@ async function main() {
             superadminName = superadminName.trim()
         }
 
+
+        // Get mobile (optional)
+        const mobile = await question(rl, 'Superadmin Mobile (optional): ')
+
         console.log('\n✅ Superadmin details received')
         console.log(`   Email: ${superadminEmail}`)
-        console.log(`   Name: ${superadminName}\n`)
+        console.log(`   Name: ${superadminName}`)
+        console.log(`   Mobile: ${mobile || 'N/A'}\n`)
 
         // 2. Seed System Permissions
         console.log('📋 Step 1/6: Seeding System Permissions...')
         const systemPermissionMap: Record<string, string> = {}
-        
+
         for (const perm of SYSTEM_PERMISSIONS) {
             const created = await prisma.systemPermission.upsert({
                 where: { code: perm.code },
@@ -296,7 +301,7 @@ async function main() {
         // 3. Seed System Permission Groups
         console.log('👥 Step 2/6: Seeding System Permission Groups...')
         const systemGroupMap: Record<string, string> = {}
-        
+
         for (const group of SYSTEM_GROUPS) {
             const permissionIds = group.permissions
                 .map(code => systemPermissionMap[code])
@@ -332,7 +337,7 @@ async function main() {
         // 4. Seed Organizational Permissions
         console.log('📋 Step 3/6: Seeding Organizational Permissions...')
         const orgPermissionMap: Record<string, string> = {}
-        
+
         for (const perm of ORG_PERMISSIONS) {
             const created = await prisma.orgPermission.upsert({
                 where: { code: perm.code },
@@ -350,7 +355,7 @@ async function main() {
         // 5. Seed Organizational Permission Groups
         console.log('👥 Step 4/6: Seeding Organizational Permission Groups...')
         const orgGroupMap: Record<string, string> = {}
-        
+
         for (const group of ORG_GROUPS) {
             const permissionIds = group.permissions
                 .map(code => orgPermissionMap[code])
@@ -385,7 +390,7 @@ async function main() {
 
         // 6. Create Superadmin User
         console.log('👤 Step 5/6: Creating Superadmin User...')
-        
+
         // Check if user already exists
         const existingUser = await prisma.systemUser.findUnique({
             where: { email: superadminEmail },
@@ -396,15 +401,16 @@ async function main() {
         if (existingUser) {
             console.log(`   ⚠️  User with email ${superadminEmail} already exists`)
             console.log('   Updating user details...')
-            
+
             await prisma.systemUser.update({
                 where: { id: existingUser.id },
                 data: {
                     name: superadminName,
+                    mobile: mobile || null,
                     isActive: true,
                 },
             })
-            
+
             superadminUserId = existingUser.id
             console.log(`   ✓ Updated existing user`)
         } else {
@@ -412,6 +418,7 @@ async function main() {
                 data: {
                     name: superadminName,
                     email: superadminEmail,
+                    mobile: mobile || null,
                     isActive: true,
                 },
             })
@@ -422,7 +429,7 @@ async function main() {
 
         // 7. Assign Superadmin Group to User
         console.log('🔗 Step 6/6: Assigning Superadmin Group...')
-        
+
         const superadminGroupId = systemGroupMap['Superadmin']
         if (!superadminGroupId) {
             throw new Error('Superadmin group not found!')
