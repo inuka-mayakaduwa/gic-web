@@ -17,11 +17,10 @@
  *   "seed:fresh": "node node_modules/.pnpm/tsx@4.20.6/node_modules/tsx/dist/cli.mjs prisma/seed-fresh.ts"
  */
 
-import 'dotenv/config'
-import { getPrisma } from '../lib/prisma'
+import { PrismaClient } from '@prisma/client'
 import * as readline from 'readline'
 
-const prisma = getPrisma()
+const prisma = new PrismaClient()
 
 // Create readline interface for user input
 function createReadlineInterface() {
