@@ -17,10 +17,16 @@
  *   "seed:fresh": "node node_modules/.pnpm/tsx@4.20.6/node_modules/tsx/dist/cli.mjs prisma/seed-fresh.ts"
  */
 
+import 'dotenv/config'
 import { PrismaClient } from '@prisma/client'
+import { PrismaPg } from '@prisma/adapter-pg'
+import { Pool } from 'pg'
 import * as readline from 'readline'
 
-const prisma = new PrismaClient()
+const connectionString = process.env.DATABASE_URL
+const pool = new Pool({ connectionString })
+const adapter = new PrismaPg(pool)
+const prisma = new PrismaClient({ adapter })
 
 // Create readline interface for user input
 function createReadlineInterface() {
