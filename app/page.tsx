@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,7 +11,7 @@ const languages = [
   { code: "ta", name: "தமிழ்" },
 ];
 
-export default function LanguageSelectionPage() {
+function LanguageSelectionContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const redirectPath = searchParams.get("redirect") || "";
@@ -46,6 +47,14 @@ export default function LanguageSelectionPage() {
         </CardContent>
       </Card>
     </main>
+  );
+}
+
+export default function LanguageSelectionPage() {
+  return (
+    <Suspense>
+      <LanguageSelectionContent />
+    </Suspense>
   );
 }
 
