@@ -3,14 +3,13 @@
 import * as React from "react"
 import Link from "next/link"
 import { useTranslations } from "next-intl"
-import { Moon, Sun, Menu, X } from "lucide-react"
-import { useTheme } from "next-themes"
+import { Menu, X } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler"
 
 export function Navbar() {
     const t = useTranslations('Citizen.Common.Navbar')
-    const { setTheme, theme } = useTheme()
     const [isScrolled, setIsScrolled] = React.useState(false)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
 
@@ -62,16 +61,7 @@ export function Navbar() {
 
                 <div className="flex items-center gap-2">
                     {/* Theme Toggle */}
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-                        className="rounded-full h-8 w-8 md:h-10 md:w-10"
-                    >
-                        <Sun className="h-[1.1rem] w-[1.1rem] md:h-[1.2rem] md:w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                        <Moon className="absolute h-[1.1rem] w-[1.1rem] md:h-[1.2rem] md:w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                        <span className="sr-only">Toggle theme</span>
-                    </Button>
+                    <AnimatedThemeToggler className="rounded-full h-8 w-8 md:h-10 md:w-10 flex items-center justify-center hover:bg-accent hover:text-accent-foreground transition-colors" />
 
                     {/* Mobile Menu Toggle */}
                     <Button

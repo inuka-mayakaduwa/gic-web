@@ -25,8 +25,22 @@
             "Hero": {
                 "title": "රජයේ තොරතුරු කේන්ද්‍රය",
                 "subtitle": "ශ්‍රී ලංකා රාජ්‍ය සේවාවන් වෙත ඔබගේ පිවිසුම",
+                "description": "ශ්‍රී ලංකා රාජ්‍ය සේවාවන් වෙත ඔබගේ පිවිසුම",
                 "searchPlaceholder": "සේවා, ආයතන, හෝ තොරතුරු සොයන්න...",
                 "searchButton": "සොයන්න",
+                "searchResults": "සෙවීම් ප්‍රතිඵල",
+                "noResults": "ප්‍රතිඵල හමු නොවීය",
+                "noResultsDescription": "ඔබගේ සෙවීම සකස් කිරීමට හෝ විවිධ කාණ්ඩ ගවේෂණය කිරීමට උත්සාහ කරන්න",
+                "searching": "සොයමින්...",
+                "searchError": "සෙවීම අසාර්ථක විය. කරුණාකර නැවත උත්සාහ කරන්න.",
+                "servicesCount": "සේවා",
+                "views": "දැක්ම්",
+                "sections": {
+                    "organizations": "ආයතන",
+                    "people": "පුද්ගලයින්",
+                    "services": "සේවා",
+                    "news": "පුවත්"
+                },
                 "tabs": {
                     "all": "සියල්ල",
                     "organizations": "ආයතන",
@@ -39,6 +53,8 @@
             },
             "Sectors": {
                 "title": "ක්ෂේත්‍ර අනුව සොයන්න",
+                "description": "ක්ෂේත්‍ර අනුව සංවිධානය කරන ලද රාජ්‍ය සේවා සොයා ගන්න",
+                "services": "සේවා",
                 "education": {
                     "name": "අධ්‍යාපන",
                     "subPoints": [
@@ -124,6 +140,22 @@
             "Organizations": {
                 "title": "රාජ්‍ය ආයතන සොයන්න",
                 "searchPlaceholder": "ආයතන සොයන්න..."
+            },
+            "LiveData": {
+                "title": "සජීවී දත්ත",
+                "description": "ඔබගේ අතේ ක්ෂණික තොරතුරු",
+                "weather": {
+                    "partlyCloudy": "අර්ධ වශයෙන් වලාකුළු සහිත",
+                    "colombo": "කොළඹ",
+                    "updatedNow": "දැන් යාවත්කාලීන කරන ලදී"
+                },
+                "trains": {
+                    "onTime": "කාලයට",
+                    "delayed": "+10මි"
+                },
+                "outages": {
+                    "noOutages": "ඔබගේ ප්‍රදේශයේ ප්‍රධාන විදුලි බිඳවැටීම් වාර්තා නොවීය."
+                }
             }
         }
     }

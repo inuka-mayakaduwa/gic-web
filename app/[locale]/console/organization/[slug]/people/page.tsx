@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { useParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Plus, Loader2, Edit2, X, Save, ChevronUp, ChevronDown, Upload, Phone, Mail, Trash2 } from "lucide-react"
@@ -700,6 +700,31 @@ function PersonRow({
         },
     })
 
+    const [expanded, setExpanded] = useState(false)
+    const [contactInfos, setContactInfos] = useState(person.contactInfos || [])
+    const [isAddingContact, setIsAddingContact] = useState(false)
+    const [selectedDepartment, setSelectedDepartment] = useState<string>("")
+
+    const fetchContactInfos = useCallback(async () => {
+        try {
+            const res = await fetch(
+                `/api/console/organization/contact-info?organizationId=${organizationId}&personId=${person.id}`
+            )
+            if (res.ok) {
+                const data = await res.json()
+                setContactInfos(data.contactInfos || [])
+            }
+        } catch (error) {
+            console.error("Failed to fetch contact info:", error)
+        }
+    }, [organizationId, person.id])
+
+    useEffect(() => {
+        if (expanded) {
+            fetchContactInfos()
+        }
+    }, [expanded, fetchContactInfos])
+
     function getInitials(name: string) {
         return name
             .split(" ")
@@ -723,31 +748,6 @@ function PersonRow({
                 />
             </div>
         )
-    }
-
-    const [expanded, setExpanded] = useState(false)
-    const [contactInfos, setContactInfos] = useState(person.contactInfos || [])
-    const [isAddingContact, setIsAddingContact] = useState(false)
-    const [selectedDepartment, setSelectedDepartment] = useState<string>("")
-
-    useEffect(() => {
-        if (expanded) {
-            fetchContactInfos()
-        }
-    }, [expanded])
-
-    async function fetchContactInfos() {
-        try {
-            const res = await fetch(
-                `/api/console/organization/contact-info?organizationId=${organizationId}&personId=${person.id}`
-            )
-            if (res.ok) {
-                const data = await res.json()
-                setContactInfos(data.contactInfos || [])
-            }
-        } catch (error) {
-            console.error("Failed to fetch contact info:", error)
-        }
     }
 
     async function handleAddContact(values: any) {

@@ -71,7 +71,7 @@ export function Sectors() {
         <section className="py-12 md:py-16 px-4 sm:px-6 max-w-7xl mx-auto" id="sectors">
             <div className="text-center mb-10 md:mb-14">
                 <h2 className="text-3xl md:text-4xl font-bold mb-3">{t('title')}</h2>
-                <p className="text-muted-foreground text-base md:text-lg">Discover government services organized by sector</p>
+                <p className="text-muted-foreground text-base md:text-lg">{t('description')}</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
@@ -112,7 +112,7 @@ export function Sectors() {
                                         </CardTitle>
                                         {subPoints.length > 0 && (
                                             <p className="text-xs md:text-sm text-muted-foreground mt-1">
-                                                {subPoints.length} services
+                                                {subPoints.length} {t('services')}
                                             </p>
                                         )}
                                     </div>

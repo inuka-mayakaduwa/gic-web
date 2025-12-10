@@ -23,15 +23,6 @@ const serviceSchema = z.object({
     descriptionEn: z.string().optional(),
     descriptionSi: z.string().optional(),
     descriptionTa: z.string().optional(),
-    requiredDocsEn: z.string().optional(),
-    requiredDocsSi: z.string().optional(),
-    requiredDocsTa: z.string().optional(),
-    paymentDetailsEn: z.string().optional(),
-    paymentDetailsSi: z.string().optional(),
-    paymentDetailsTa: z.string().optional(),
-    processingTimeEn: z.string().optional(),
-    processingTimeSi: z.string().optional(),
-    processingTimeTa: z.string().optional(),
     serviceUrl: z.string().url().optional().or(z.literal("")),
     status: z.enum(["ACTIVE", "HIDDEN"]),
     order: z.number().int(),
@@ -79,15 +70,6 @@ export default function ServicesPage() {
             descriptionEn: "",
             descriptionSi: "",
             descriptionTa: "",
-            requiredDocsEn: "",
-            requiredDocsSi: "",
-            requiredDocsTa: "",
-            paymentDetailsEn: "",
-            paymentDetailsSi: "",
-            paymentDetailsTa: "",
-            processingTimeEn: "",
-            processingTimeSi: "",
-            processingTimeTa: "",
             serviceUrl: "",
             status: "ACTIVE",
             order: 0,
@@ -434,87 +416,6 @@ function ServiceForm({
                 </div>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-3">
-                <div>
-                    <Label htmlFor="requiredDocsEn">Required Documents (English)</Label>
-                    <Textarea
-                        id="requiredDocsEn"
-                        {...form.register("requiredDocsEn")}
-                        rows={3}
-                        placeholder="List required documents..."
-                    />
-                </div>
-                <div>
-                    <Label htmlFor="requiredDocsSi">Required Documents (Sinhala)</Label>
-                    <Textarea
-                        id="requiredDocsSi"
-                        {...form.register("requiredDocsSi")}
-                        rows={3}
-                    />
-                </div>
-                <div>
-                    <Label htmlFor="requiredDocsTa">Required Documents (Tamil)</Label>
-                    <Textarea
-                        id="requiredDocsTa"
-                        {...form.register("requiredDocsTa")}
-                        rows={3}
-                    />
-                </div>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-3">
-                <div>
-                    <Label htmlFor="paymentDetailsEn">Payment Details (English)</Label>
-                    <Textarea
-                        id="paymentDetailsEn"
-                        {...form.register("paymentDetailsEn")}
-                        rows={3}
-                        placeholder="Payment information..."
-                    />
-                </div>
-                <div>
-                    <Label htmlFor="paymentDetailsSi">Payment Details (Sinhala)</Label>
-                    <Textarea
-                        id="paymentDetailsSi"
-                        {...form.register("paymentDetailsSi")}
-                        rows={3}
-                    />
-                </div>
-                <div>
-                    <Label htmlFor="paymentDetailsTa">Payment Details (Tamil)</Label>
-                    <Textarea
-                        id="paymentDetailsTa"
-                        {...form.register("paymentDetailsTa")}
-                        rows={3}
-                    />
-                </div>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-3">
-                <div>
-                    <Label htmlFor="processingTimeEn">Processing Time (English)</Label>
-                    <Input
-                        id="processingTimeEn"
-                        {...form.register("processingTimeEn")}
-                        placeholder="e.g., 5-7 business days"
-                    />
-                </div>
-                <div>
-                    <Label htmlFor="processingTimeSi">Processing Time (Sinhala)</Label>
-                    <Input
-                        id="processingTimeSi"
-                        {...form.register("processingTimeSi")}
-                    />
-                </div>
-                <div>
-                    <Label htmlFor="processingTimeTa">Processing Time (Tamil)</Label>
-                    <Input
-                        id="processingTimeTa"
-                        {...form.register("processingTimeTa")}
-                    />
-                </div>
-            </div>
-
             {/* CTAs */}
             <div>
                 <div className="flex items-center justify-between mb-2">
@@ -607,15 +508,6 @@ function ServiceRow({
             descriptionEn: "",
             descriptionSi: "",
             descriptionTa: "",
-            requiredDocsEn: "",
-            requiredDocsSi: "",
-            requiredDocsTa: "",
-            paymentDetailsEn: "",
-            paymentDetailsSi: "",
-            paymentDetailsTa: "",
-            processingTimeEn: "",
-            processingTimeSi: "",
-            processingTimeTa: "",
             serviceUrl: service.serviceUrl || "",
             status: service.status as "ACTIVE" | "HIDDEN",
             order: service.order,

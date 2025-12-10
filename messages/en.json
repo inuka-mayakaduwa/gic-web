@@ -25,8 +25,22 @@
             "Hero": {
                 "title": "Government Information Center",
                 "subtitle": "Your gateway to Sri Lankan Government Services",
+                "description": "Your gateway to Sri Lankan Government Services",
                 "searchPlaceholder": "Search for services, organizations, or information...",
                 "searchButton": "Search",
+                "searchResults": "Search Results",
+                "noResults": "No results found",
+                "noResultsDescription": "Try adjusting your search or explore different categories",
+                "searching": "Searching...",
+                "searchError": "Failed to perform search. Please try again.",
+                "servicesCount": "Services",
+                "views": "views",
+                "sections": {
+                    "organizations": "Organizations",
+                    "people": "People",
+                    "services": "Services",
+                    "news": "News"
+                },
                 "tabs": {
                     "all": "All",
                     "organizations": "Organizations",
@@ -39,6 +53,8 @@
             },
             "Sectors": {
                 "title": "Explore by Sector",
+                "description": "Discover government services organized by sector",
+                "services": "services",
                 "education": {
                     "name": "Education",
                     "subPoints": [
@@ -124,6 +140,22 @@
             "Organizations": {
                 "title": "Find Government Organizations",
                 "searchPlaceholder": "Search organizations..."
+            },
+            "LiveData": {
+                "title": "Live Data",
+                "description": "Real-time information at your fingertips",
+                "weather": {
+                    "partlyCloudy": "Partly Cloudy",
+                    "colombo": "Colombo",
+                    "updatedNow": "Updated now"
+                },
+                "trains": {
+                    "onTime": "On Time",
+                    "delayed": "+10m"
+                },
+                "outages": {
+                    "noOutages": "No major power outages reported in your area."
+                }
             }
         }
     }

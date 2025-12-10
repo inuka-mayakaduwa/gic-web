@@ -191,18 +191,6 @@ model Service {
   descriptionSi  String?
   descriptionTa  String?
   
-  requiredDocsEn String?
-  requiredDocsSi String?
-  requiredDocsTa String?
-  
-  paymentDetailsEn String?
-  paymentDetailsSi String?
-  paymentDetailsTa String?
-  
-  processingTimeEn String?
-  processingTimeSi String?
-  processingTimeTa String?
-  
   serviceUrl     String?
   status         String  @default("ACTIVE") // ACTIVE, HIDDEN
   order          Int     @default(0)
